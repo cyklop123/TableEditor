@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 
-public class userInputWindowController {
+public class UserInputWindowController {
 
     static private int rows, columns;
 

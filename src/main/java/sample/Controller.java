@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.List;
 public class Controller {
 
     public List<TableColumn> tableColumnList = new ArrayList<>();
-    tableViewModel tvm;
+    TableViewModel tvm;
 
     @FXML
     private MenuItem newTable;
@@ -36,12 +35,12 @@ public class Controller {
             window.setScene(new Scene(windowRoot));
             window.showAndWait();
 
-            Integer a = userInputWindowController.getRows();
-            Integer b = userInputWindowController.getColumns();
+            Integer a = UserInputWindowController.getRows();
+            Integer b = UserInputWindowController.getColumns();
 
             if (a != 0 && b != 0) {
                 if(tvm == null)
-                    tvm = new tableViewModel();
+                    tvm = new TableViewModel();
                 tvm.createTableView(a, b);
                 background.setCenter(tvm.getTableView());
             }
@@ -64,9 +63,31 @@ public class Controller {
         System.out.println("add Row");
         if(background.getChildren().size() > 1) {
             if (tvm == null)
-                tvm = new tableViewModel();
+                tvm = new TableViewModel();
             tvm.addRow();
         }
     }
 
+    @FXML
+    public void addColumn(ActionEvent event)
+    {
+        System.out.println("add col");
+        if(background.getChildren().size() > 1) {
+            if (tvm == null)
+                tvm = new TableViewModel();
+            tvm.addColumn();
+        }
+    }
+
+    @FXML
+    public void deleteColumn(ActionEvent event)
+    {
+
+    }
+
+    @FXML
+    public void deleteRow(ActionEvent event)
+    {
+
+    }
 }

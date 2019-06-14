@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tableViewModel {
+public class TableViewModel {
     private static List<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     GridPane container = new GridPane();
 
@@ -58,16 +58,30 @@ public class tableViewModel {
     public void addRow()
     {
         HBox row = new HBox();
-        GridPane.setConstraints(row,0, userInputWindowController.getRows()+1);
-        for(int i=0; i<userInputWindowController.getColumns(); i++)
+        GridPane.setConstraints(row,0, UserInputWindowController.getRows()+1);
+        for(int i = 0; i< UserInputWindowController.getColumns(); i++)
         {
             TextField cell = new TextField();
-            cell.setPromptText("row "+(userInputWindowController.getRows()+1)+" col "+(i+1));
+            cell.setPromptText("row "+(UserInputWindowController.getRows()+1)+" col "+(i+1));
             cell.setMaxWidth(140);
             cell.setMinWidth(40);
             row.getChildren().addAll(cell);
         }
         container.getChildren().addAll(row);
-        userInputWindowController.incrementRows();
+        UserInputWindowController.incrementRows();
+    }
+
+    public void addColumn()
+    {
+        for(int i = 0; i< UserInputWindowController.getRows(); i++)
+        {
+            HBox row = (HBox) container.getChildren().get(i);
+            TextField cell = new TextField();
+            cell.setPromptText("row "+(i+1)+" col "+(UserInputWindowController.getColumns()+1));
+            cell.setMaxWidth(140);
+            cell.setMinWidth(40);
+            row.getChildren().addAll(cell);
+        }
+        UserInputWindowController.incrementColumns();
     }
 }

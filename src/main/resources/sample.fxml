@@ -23,10 +23,10 @@
                 <Menu mnemonicParsing="false" text="Edit">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addRow" text="Add row" />
-                        <MenuItem mnemonicParsing="false" text="Add col" />
+                        <MenuItem mnemonicParsing="false" onAction="#addColumn" text="Add column" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Delete row" />
-                        <MenuItem mnemonicParsing="false" text="Delete col" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteRow" text="Delete row" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteColumn" text="Delete column" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
