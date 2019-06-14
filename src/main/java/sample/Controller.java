@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -61,9 +62,11 @@ public class Controller {
     public void addRow(ActionEvent event)
     {
         System.out.println("add Row");
-        if(tvm == null)
-            tvm = new tableViewModel();
-        tvm.saveDataToArray();
+        if(background.getChildren().size() > 1) {
+            if (tvm == null)
+                tvm = new tableViewModel();
+            tvm.addRow();
+        }
     }
 
 }

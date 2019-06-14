@@ -39,6 +39,7 @@ public class tableViewModel {
     {
         if(container.getChildren().size() > 0)
         {
+            table = new ArrayList<ArrayList<String>>();
             for(Node node: container.getChildren())
             {
                 HBox hbox = (HBox) node;
@@ -50,7 +51,23 @@ public class tableViewModel {
                 }
                 table.add(row);
             }
+            System.out.println(table.toString());
         }
-        System.out.println(table.toString());
+    }
+
+    public void addRow()
+    {
+        HBox row = new HBox();
+        GridPane.setConstraints(row,0, userInputWindowController.getRows()+1);
+        for(int i=0; i<userInputWindowController.getColumns(); i++)
+        {
+            TextField cell = new TextField();
+            cell.setPromptText("row "+(userInputWindowController.getRows()+1)+" col "+(i+1));
+            cell.setMaxWidth(140);
+            cell.setMinWidth(40);
+            row.getChildren().addAll(cell);
+        }
+        container.getChildren().addAll(row);
+        userInputWindowController.incrementRows();
     }
 }

@@ -55,4 +55,15 @@ public class userInputWindowController {
     static public Integer getRows() {
         return rows;
     }
+
+    static public void incrementColumns()
+    {
+        columns++;
+    }
+
+    static public void incrementRows()
+    {
+        rows++;
+    }
+
 }
