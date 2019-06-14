@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -8,7 +9,7 @@ import javafx.scene.layout.HBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tableViewModel {
+public class TableViewModel {
     private static List<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     GridPane container = new GridPane();
 
@@ -16,17 +17,14 @@ public class tableViewModel {
         if (table.isEmpty()) {
             for(int i=0; i<rows; i++)
             {
-                HBox row = new HBox();
-                GridPane.setConstraints(row, 0, (i+1));
                 for(int j=0; j<columns; j++)
                 {
                     TextField cell = new TextField();
                     cell.setPromptText("row "+(i+1)+" col "+(j+1));
                     cell.setMaxWidth(140);
                     cell.setMinWidth(40);
-                    row.getChildren().addAll(cell);
+                    container.addRow(i, cell);
                 }
-                container.getChildren().addAll(row);
             }
         }
     }
