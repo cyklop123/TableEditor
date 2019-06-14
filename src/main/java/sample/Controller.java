@@ -7,17 +7,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Controller {
-
-    public List<TableColumn> tableColumnList = new ArrayList<>();
-    TableViewModel tvm;
+    private  TableViewModel tvm;
 
     @FXML
     private MenuItem newTable;
@@ -50,11 +48,6 @@ public class Controller {
             alert.setContentText(e.toString());
             alert.showAndWait();
         }
-    }
-
-    public BorderPane getBackground() {
-        System.out.println(this.background);
-        return this.background;
     }
 
     @FXML
