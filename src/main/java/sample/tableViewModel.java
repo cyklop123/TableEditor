@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -20,7 +21,9 @@ public class tableViewModel {
                 for(int j=0; j<columns; j++)
                 {
                     TextField cell = new TextField();
-                    cell.setPromptText("row "+i+" col "+j);
+                    cell.setPromptText("row "+(i+1)+" col "+(j+1));
+                    cell.setMaxWidth(140);
+                    cell.setMinWidth(40);
                     row.getChildren().addAll(cell);
                 }
                 container.getChildren().addAll(row);
@@ -30,5 +33,24 @@ public class tableViewModel {
 
     public GridPane getTableView() {
         return container;
+    }
+
+    public void saveDataToArray()
+    {
+        if(container.getChildren().size() > 0)
+        {
+            for(Node node: container.getChildren())
+            {
+                HBox hbox = (HBox) node;
+                ArrayList<String> row = new ArrayList<>();
+                for(Node node1: hbox.getChildren())
+                {
+                    TextField tf = (TextField) node1;
+                    row.add(tf.getText());
+                }
+                table.add(row);
+            }
+        }
+        System.out.println(table.toString());
     }
 }

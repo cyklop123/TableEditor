@@ -17,6 +17,7 @@ import java.util.List;
 public class Controller {
 
     public List<TableColumn> tableColumnList = new ArrayList<>();
+    tableViewModel tvm;
 
     @FXML
     private MenuItem newTable;
@@ -38,7 +39,8 @@ public class Controller {
             Integer b = userInputWindowController.getColumns();
 
             if (a != 0 && b != 0) {
-                tableViewModel tvm = new tableViewModel();
+                if(tvm == null)
+                    tvm = new tableViewModel();
                 tvm.createTableView(a, b);
                 background.setCenter(tvm.getTableView());
             }
@@ -54,4 +56,14 @@ public class Controller {
         System.out.println(this.background);
         return this.background;
     }
+
+    @FXML
+    public void addRow(ActionEvent event)
+    {
+        System.out.println("add Row");
+        if(tvm == null)
+            tvm = new tableViewModel();
+        tvm.saveDataToArray();
+    }
+
 }
