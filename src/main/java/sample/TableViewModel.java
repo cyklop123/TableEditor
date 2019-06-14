@@ -63,24 +63,17 @@ public class TableViewModel {
 
     public void addRow()
     {
-        TextInputDialog dialog = new TextInputDialog("0");
-        dialog.setTitle("Input Rows");
-        dialog.setHeaderText("Enter number of rows");
-        dialog.setContentText("Rows:");
+        TextInputDialog amountDialog = new TextInputDialog("1");
+        amountDialog.setTitle("Number of rows");
+        amountDialog.setHeaderText("Enter number of rows to be added");
+        amountDialog.setContentText("Rows");
 
-        //walidacja danych wejściowych
-        Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-        ok.addEventFilter(ActionEvent.ACTION, ae -> {
+        Button amountOk = (Button) amountDialog.getDialogPane().lookupButton(ButtonType.OK);
+        amountOk.addEventFilter(ActionEvent.ACTION,ae->{
             try{
-                int val = Integer.parseInt(dialog.getEditor().getText());
-                if(val < 0 || val > UserInputWindowController.getRows())
-                {
+                int val = Integer.parseInt(amountDialog.getEditor().getText());
+                if(val < 1)
                     throw new Exception("Bad data");
-                }
-            }
-            catch (NumberFormatException e)
-            {
-                ae.consume();
             }
             catch (Exception e)
             {
@@ -88,42 +81,74 @@ public class TableViewModel {
             }
         });
 
-        Optional<String> res = dialog.showAndWait();
+        Optional<String> amountRes = amountDialog.showAndWait();
 
-        res.ifPresent(val -> {
+        amountRes.ifPresent(amountVal->{
+            int amount = Integer.parseInt(amountVal);
 
-            int index = Integer.parseInt(val);
+            //drugi input dialog
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Input row number");
+            dialog.setHeaderText("Enter row number");
+            dialog.setContentText("After row:");
 
-            HBox row = new HBox();
-            //ustawienie położenia
-            GridPane.setConstraints(row,0, index+1);
-            //przesunięcie poprzednich o jedno niżej
-            for(Node node: container.getChildren())
-            {
-                int i=container.getRowIndex(node);
-                if(i>index)
-                {
-                    container.setRowIndex(node,i+1);
-                    int j = 1;
-                    for (Node cell : ((HBox) (node)).getChildren()) {
-                        ((TextField) (cell)).setPromptText("row " + (i + 1) + " col" + j);
-                        j++;
+            //walidacja danych wejściowych
+            Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+            ok.addEventFilter(ActionEvent.ACTION, ae -> {
+                try{
+                    int val = Integer.parseInt(dialog.getEditor().getText());
+                    if(val < 0 || val > UserInputWindowController.getRows())
+                    {
+                        throw new Exception("Bad data");
                     }
                 }
-            }
-            //tworzenie wiersza
-            for(int i = 0; i< UserInputWindowController.getColumns(); i++)
-            {
-                TextField cell = new TextField();
-                cell.setPromptText("row "+(index+1)+" col "+(i+1));
-                cell.setMaxWidth(140);
-                cell.setMinWidth(40);
-                row.getChildren().addAll(cell);
-            }
-            container.getChildren().add(index,row);
-            UserInputWindowController.incrementRows();
-            saveDataToArray();
-            System.out.println(table.toString());
+                catch (Exception e)
+                {
+                    ae.consume();//zatrzymanie nacisniecia
+                }
+            });
+
+            Optional<String> res = dialog.showAndWait();
+
+            res.ifPresent(val -> {
+
+                int index = Integer.parseInt(val);
+
+                //przesunięcie poprzednich o jedno niżej
+                for(Node node: container.getChildren())
+                {
+                    int i=container.getRowIndex(node);
+                    if(i>index)
+                    {
+                        container.setRowIndex(node,i+1+amount);
+                        int j = 1;
+                        for (Node cell : ((HBox) (node)).getChildren()) {
+                            ((TextField) (cell)).setPromptText("row " + (i + amount) + " col " + j);
+                            j++;
+                        }
+                    }
+                }
+
+                for(int j=0; j<amount; j++) {
+                    HBox row = new HBox();
+                    //ustawienie położenia
+                    GridPane.setConstraints(row, 0, index + 1+j);
+
+                    //tworzenie wiersza
+                    for (int i = 0; i < UserInputWindowController.getColumns(); i++) {
+                        TextField cell = new TextField();
+                        cell.setPromptText("row " + (index + 1 + j) + " col " + (i + 1));
+                        cell.setMaxWidth(140);
+                        cell.setMinWidth(40);
+                        row.getChildren().addAll(cell);
+                    }
+                    container.getChildren().add(index+j, row);
+                    UserInputWindowController.incrementRows();
+                }
+                saveDataToArray();
+                System.out.println(table.toString());
+            });
+
         });
     }
 
