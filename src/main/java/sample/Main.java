@@ -41,6 +41,7 @@ public class Main extends Application {
 
     public static void createTableView (Integer rows, Integer columns) {
         if (tableView == null) {
+            System.out.println(rows + columns);
             tableView = new TableView<>();
             for (int i = 1; i <= columns; i++) {
                 tableColumnList.add(new TableColumn("col-" + i));

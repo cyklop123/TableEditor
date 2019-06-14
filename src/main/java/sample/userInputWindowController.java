@@ -26,6 +26,9 @@ public class userInputWindowController {
             rows = Integer.parseInt(rowsInput.getText());
             columns = Integer.parseInt(colsInput.getText());
             Stage stage = (Stage) b1.getScene().getWindow();
+            if (rows <= 0 || columns <= 0) {
+                throw new Exception("Too low value");
+            }
             stage.close();
         }
         catch (NumberFormatException error) {
@@ -33,6 +36,16 @@ public class userInputWindowController {
             alert.setHeaderText("Wrong data");
             alert.setContentText(error.toString());
             alert.showAndWait();
+            rows = 0;
+            columns = 0;
+        }
+        catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Wrong data");
+            alert.setContentText(e.toString());
+            alert.showAndWait();
+            rows = 0;
+            columns = 0;
         }
     }
 

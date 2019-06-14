@@ -21,7 +21,6 @@ public class Controller {
     @FXML
     private MenuItem newTable;
 
-
     @FXML
     private BorderPane background;
 
@@ -34,16 +33,25 @@ public class Controller {
 
             window.setScene(new Scene(windowRoot));
             window.showAndWait();
+
             Integer a = userInputWindowController.getRows();
             Integer b = userInputWindowController.getColumns();
-            Main.createTableView(a, b);
 
+            if (a != 0 && b != 0) {
+                tableViewModel tvm = new tableViewModel();
+                tvm.createTableView(a, b);
+                background.setCenter(tvm.getTableView());
+            }
         }
         catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Cannot open widnow");
             alert.setContentText(e.toString());
             alert.showAndWait();
         }
+    }
+
+    public BorderPane getBackground() {
+        System.out.println(this.background);
+        return this.background;
     }
 }
