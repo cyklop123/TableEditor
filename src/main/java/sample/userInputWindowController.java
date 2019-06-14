@@ -36,11 +36,11 @@ public class userInputWindowController {
         }
     }
 
-    static public int getColumns() {
+    static public Integer getColumns() {
         return columns;
     }
 
-    static public int getRows() {
+    static public Integer getRows() {
         return rows;
     }
 }

@@ -34,7 +34,9 @@ public class Controller {
 
             window.setScene(new Scene(windowRoot));
             window.showAndWait();
-
+            Integer a = userInputWindowController.getRows();
+            Integer b = userInputWindowController.getColumns();
+            Main.createTableView(a, b);
 
         }
         catch (Exception e) {
