@@ -5,6 +5,11 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+
+import java.io.File;
+import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -234,5 +239,99 @@ public class TableViewModel {
 
     public void deleteRow() {
 
+    }
+
+    public void creatingLaTexFile(boolean skipTexSymbols) {
+        saveDataToArray();
+        TextInputDialog fileNameWindow = new TextInputDialog("");
+        fileNameWindow.setTitle("Input file name");
+        fileNameWindow.setHeaderText("Enter the file name");
+        fileNameWindow.setContentText("File name");
+
+        Button nameOk = (Button) fileNameWindow.getDialogPane().lookupButton(ButtonType.OK);
+        nameOk.addEventFilter(ActionEvent.ACTION,ae->{
+            try{
+                String fileName = fileNameWindow.getEditor().getText();
+                if(fileName.equals(""))
+                    throw new Exception("Bad data");
+            }
+            catch (Exception e)
+            {
+                ae.consume();
+            }
+        });
+
+        Optional<String> fileNameInput = fileNameWindow.showAndWait();
+        fileNameInput.ifPresent(name-> {
+            String fileName = name + ".tex";
+            FileWriter out = null;
+            //File LaTexFile = new File(fileName);
+            try {
+                String[] unavailableCharacters = {"\\", "%", "$", "_", "#", "&", "^", "<", ">"};
+                int n = (int)container.getWidth() / 140;
+                out = new FileWriter(new File(fileName));
+                out.write("\\documentclass[12pt]{article}\n");
+                out.write("\\begin{document}\n");
+                out.write("\\begin{table}[]\n");
+                out.write("\\begin {tabular}{" + new String(new char[n]).replace("\0", "|l") + '|' + "}\n");
+                out.write("\\hline\n");
+                for (List l: table) {
+                    for (int i = 0; i < n; i++) {
+                        String ourText = l.get(i).toString();
+                        if (skipTexSymbols) {
+                            for (String items : unavailableCharacters) {
+                                if (ourText.contains(items)) {
+                                    switch (items) {
+                                        case "%":
+                                            ourText = ourText.replace("%", "\\%");
+                                            break;
+                                        case "$":
+                                            ourText = ourText.replace("$", "\\$");
+                                            break;
+                                        case "_":
+                                            ourText = ourText.replace("_", "\\_");
+                                            break;
+                                        case "#":
+                                            ourText = ourText.replace("#", "\\#");
+                                            break;
+                                        case "&":
+                                            ourText = ourText.replace("&", "\\&");
+                                            break;
+                                        case "^":
+                                            ourText = ourText.replace("^", "\\textasciicircum{}");
+                                            break;
+                                        case "<":
+                                            ourText = ourText.replace("<", "\\textless{}");
+                                            break;
+                                        case ">":
+                                            ourText = ourText.replace(">", "\\textgreater{}");
+                                            break;
+                                        case "\\":
+                                            ourText = ourText.replace("\\", "\\textbackslash{}");
+                                            break;
+                                    }
+                                }
+                            }
+
+                        }
+                        out.write(ourText + " ");
+                        if (i < n - 1) {
+                            out.write("& ");
+                        }
+                    }
+                    out.write("\\\\ \\hline\n");
+                }
+                out.write("\\end{tabular}\n");
+                out.write("\\end{table}\n");
+                out.write("\\end{document}\n");
+
+                out.close();
+            }
+            catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText(e.toString());
+                alert.showAndWait();
+            }
+        });
     }
 }

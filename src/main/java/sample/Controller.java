@@ -16,6 +16,9 @@ public class Controller {
     private  TableViewModel tvm;
 
     @FXML
+    private CheckMenuItem skipTexSymbolsCheck;
+
+    @FXML
     private MenuItem newTable;
 
     @FXML
@@ -92,6 +95,14 @@ public class Controller {
 
     @FXML
     public void creatingLaTexFile() {
-
+        System.out.println("create latex");
+        if (tvm == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Create table first");
+            alert.showAndWait();
+        }
+        else {
+            tvm.creatingLaTexFile(skipTexSymbolsCheck.isSelected());
+        }
     }
 }

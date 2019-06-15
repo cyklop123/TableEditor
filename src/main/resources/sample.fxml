@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -29,6 +30,11 @@
                            <MenuItem mnemonicParsing="false" onAction="#deleteColumn" text="Delete column" />
                         </items>
                      </Menu>
+                  <Menu mnemonicParsing="false" text="Settings">
+                     <items>
+                        <CheckMenuItem fx:id="skipTexSymbolsCheck" mnemonicParsing="false" selected="true" text="Skip special TeX symbols (%,_,$...)" />
+                     </items>
+                  </Menu>
                      <Menu mnemonicParsing="false" text="Help">
                         <items>
                            <MenuItem mnemonicParsing="false" text="About" />
