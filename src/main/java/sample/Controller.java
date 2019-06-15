@@ -7,8 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -40,7 +38,7 @@ public class Controller {
                 if(tvm == null)
                     tvm = new TableViewModel();
                 tvm.createTableView(a, b);
-                background.setCenter(tvm.getTableView());
+                background.setCenter(tvm.getScrollPane());
             }
         }
         catch (Exception e) {
@@ -81,6 +79,19 @@ public class Controller {
     @FXML
     public void deleteRow(ActionEvent event)
     {
+        System.out.println("delete row");
+        if (tvm == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Create table first");
+            alert.showAndWait();
+        }
+        else {
+            tvm.deleteRow();
+        }
+    }
+
+    @FXML
+    public void creatingLaTexFile() {
 
     }
 }

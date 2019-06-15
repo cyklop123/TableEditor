@@ -17,7 +17,7 @@
                         <items>
                            <MenuItem fx:id="newTable" mnemonicParsing="false" onAction="#creatingNewTable" text="New Table" />
                            <SeparatorMenuItem mnemonicParsing="false" />
-                           <MenuItem mnemonicParsing="false" text="Generate LaTex" />
+                           <MenuItem mnemonicParsing="false" onAction="#creatingLaTexFile" text="Generate LaTex" />
                         </items>
                      </Menu>
                      <Menu mnemonicParsing="false" text="Edit">

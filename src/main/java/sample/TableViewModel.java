@@ -2,21 +2,18 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-
-import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class TableViewModel {
     private static List<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
+
     GridPane container = new GridPane();
+    ScrollPane scrollPane = new ScrollPane(container);
 
     public void createTableView (Integer rows, Integer columns) {
         if (table.isEmpty()) {
@@ -39,6 +36,10 @@ public class TableViewModel {
 
     public GridPane getTableView() {
         return container;
+    }
+
+    public ScrollPane getScrollPane() {
+        return scrollPane;
     }
 
     public void saveDataToArray()
@@ -118,7 +119,7 @@ public class TableViewModel {
                     for (Node node : container.getChildren()) {
                         int i = container.getRowIndex(node);
                         if (i > index) {
-                            container.setRowIndex(node, i + 1 + amount);
+                            container.setRowIndex(node, i + amount);
                             int j = 1;
                             for (Node cell : ((HBox) (node)).getChildren()) {
                                 ((TextField) (cell)).setPromptText("row " + (i + amount) + " col " + j);
@@ -229,5 +230,9 @@ public class TableViewModel {
             });
 
         });
+    }
+
+    public void deleteRow() {
+
     }
 }
