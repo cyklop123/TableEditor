@@ -39,13 +39,13 @@ public class Controller {
             window.setScene(new Scene(windowRoot));
             window.showAndWait();
 
-            System.out.println("przed"+background.getChildren().size());
-            if(tvm == null)
-                tvm = new TableViewModel();
-            if(tvm.createTableView())
-               background.setCenter(tvm.getScrollPane());
+            if(UserInputWindowController.getColumns() !=0 && UserInputWindowController.getRows() != 0) {
+                if (tvm == null)
+                    tvm = new TableViewModel();
+                tvm.createTableView();
+                background.setCenter(tvm.getScrollPane());
+            }
 
-            System.out.println("Po"+background.getChildren().size());
         }
         catch (Exception e) {
             new AlertError(e.getMessage()).show();
