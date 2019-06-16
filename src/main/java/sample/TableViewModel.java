@@ -6,22 +6,19 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-
 import java.io.File;
-import java.io.*;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class TableViewModel {
-    private static List<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
+    private List<ArrayList<String>> table = new ArrayList<>();
 
     private int rows=0,cols=0;
 
-    GridPane container = new GridPane();
-    ScrollPane scrollPane = new ScrollPane(container);
+    private GridPane container = new GridPane();
+    private ScrollPane scrollPane = new ScrollPane(container);
 
     public boolean createTableView () {
         if (container.getChildren().size() == 0) {
@@ -56,7 +53,7 @@ public class TableViewModel {
     {
         if(container.getChildren().size() > 0)
         {
-            table = new ArrayList<ArrayList<String>>();
+            table = new ArrayList<>();
             for(Node node: container.getChildren())
             {
                 HBox hbox = (HBox) node;
@@ -87,9 +84,9 @@ public class TableViewModel {
 
                 //przesunięcie poprzednich o jedno niżej
                 for (Node node : container.getChildren()) {
-                    int i = container.getRowIndex(node);
+                    int i = GridPane.getRowIndex(node);
                     if (i > index) {
-                        container.setRowIndex(node, i + amount);
+                        GridPane.setRowIndex(node, i + amount);
                         int j = 1;
                         for (Node cell : ((HBox) (node)).getChildren()) {
                             ((TextField) (cell)).setPromptText("row " + (i + amount) + " col " + j);
@@ -182,7 +179,7 @@ public class TableViewModel {
                         HBox hBox = (HBox) node;
 
                         TextField cell = new TextField();
-                        cell.setPromptText("row " + container.getRowIndex(node) + " col " + (index+i));
+                        cell.setPromptText("row " + GridPane.getRowIndex(node) + " col " + (index+i));
                         cell.setMaxWidth(140);
                         cell.setMinWidth(40);
 
@@ -192,7 +189,7 @@ public class TableViewModel {
                         {
                             if(j > (index+i)) {
                                 TextField tf = (TextField) row;
-                                tf.setPromptText("row " + container.getRowIndex(node) + " col " + j);
+                                tf.setPromptText("row " + GridPane.getRowIndex(node) + " col " + j);
                             }
                             j++;
                         }
@@ -269,8 +266,7 @@ public class TableViewModel {
         Optional<String> fileNameInput = fileNameWindow.showAndWait();
         fileNameInput.ifPresent(name-> {
             String fileName = name + ".tex";
-            FileWriter out = null;
-            //File LaTexFile = new File(fileName);
+            FileWriter out;
             try {
                 String[] unavailableCharacters = {"\\", "%", "$", "_", "#", "&", "^", "<", ">"};
                 int n = (int)container.getWidth() / 140;
