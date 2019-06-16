@@ -7,7 +7,7 @@ import javafx.scene.control.TextInputDialog;
 
 public class InputIntPrompt extends Prompt {
     String header;
-    Integer value=-1,min,max=-1;
+    Integer value=-1,min,max=-1;//min>=0,max>0
     public InputIntPrompt(String msg, String _header, Integer _min, Integer _max) {
         super(msg);
         header = _header;
@@ -25,11 +25,10 @@ public class InputIntPrompt extends Prompt {
         dialog = new TextInputDialog("");
         dialog.setHeaderText(header);
         dialog.setContentText(message);
-        Button amountOk = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-        amountOk.addEventFilter(ActionEvent.ACTION, ae->{
+        Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        ok.addEventFilter(ActionEvent.ACTION, ae->{ //walidacja danych
             try{
                 int val = Integer.parseInt(((TextInputDialog)dialog).getEditor().getText());
-                System.out.println(val);
                 if(val < min)
                     throw new Exception("Too low value");
                 if(max>=0 && val>max)
@@ -38,7 +37,7 @@ public class InputIntPrompt extends Prompt {
             }
             catch (Exception e)
             {
-                ae.consume();
+                ae.consume(); //zatrzymanie zamknięcia
                 new AlertError(e.getMessage()).show();
             }
         });

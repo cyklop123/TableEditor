@@ -1,5 +1,6 @@
 package sample;
 
+import alerts.AlertError;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -31,18 +32,12 @@ public class UserInputWindowController {
             stage.close();
         }
         catch (NumberFormatException error) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Wrong data");
-            alert.setContentText(error.toString());
-            alert.showAndWait();
+            new AlertError("Wrong data").show();
             rows = 0;
             columns = 0;
         }
         catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Wrong data");
-            alert.setContentText(e.toString());
-            alert.showAndWait();
+            new AlertError("Wrong data").show();
             rows = 0;
             columns = 0;
         }

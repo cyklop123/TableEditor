@@ -1,5 +1,6 @@
 package sample;
 
+import alerts.InputIntPrompt;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -22,7 +23,7 @@ public class TableViewModel {
     GridPane container = new GridPane();
     ScrollPane scrollPane = new ScrollPane(container);
 
-    public void createTableView () {
+    public boolean createTableView () {
         if (container.getChildren().size() == 0) {
             rows = UserInputWindowController.getRows();
             cols = UserInputWindowController.getColumns();
@@ -40,7 +41,9 @@ public class TableViewModel {
                 }
                 container.getChildren().addAll(row);
             }
+            return true;
         }
+        return false;
     }
 
     public ScrollPane getScrollPane() {
@@ -69,58 +72,16 @@ public class TableViewModel {
 
     public void addRow()
     {
-        TextInputDialog amountDialog = new TextInputDialog("1");
-        amountDialog.setTitle("Number of rows");
-        amountDialog.setHeaderText("Enter amount of rows to be added");
-        amountDialog.setContentText("Rows");
-
-        Button amountOk = (Button) amountDialog.getDialogPane().lookupButton(ButtonType.OK);
-        amountOk.addEventFilter(ActionEvent.ACTION,ae->{
-            try{
-                int val = Integer.parseInt(amountDialog.getEditor().getText());
-                if(val < 1)
-                    throw new Exception("Bad data");
-            }
-            catch (Exception e)
+        InputIntPrompt amountPrompt = new InputIntPrompt("Rows" ,"Enter amount of rows to be added", 1);
+        amountPrompt.show();
+        if(amountPrompt.getInt() != -1)
+        {
+            InputIntPrompt indexPrompt = new InputIntPrompt("After row(0=before first):","Enter row index",0, rows);
+            indexPrompt.show();
+            if(indexPrompt.getInt() != -1)
             {
-                ae.consume();
-                alert(e.getMessage());
-            }
-        });
-
-        Optional<String> amountRes = amountDialog.showAndWait();
-
-        amountRes.ifPresent(amountVal->{
-            int amount = Integer.parseInt(amountVal);
-
-            //drugi input dialog
-            TextInputDialog dialog = new TextInputDialog("1");
-            dialog.setTitle("Input row index");
-            dialog.setHeaderText("Enter row index");
-            dialog.setContentText("After row(0=before first):");
-
-            //walidacja danych wejściowych
-            Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-            ok.addEventFilter(ActionEvent.ACTION, ae -> {
-                try{
-                    int val = Integer.parseInt(dialog.getEditor().getText());
-                    if(val < 0 || val > rows)
-                    {
-                        throw new Exception("Bad data");
-                    }
-                }
-                catch (Exception e)
-                {
-                    ae.consume();//zatrzymanie nacisniecia
-                    alert(e.getMessage());
-                }
-            });
-
-            Optional<String> res = dialog.showAndWait();
-
-            res.ifPresent(val -> {
-
-                int index = Integer.parseInt(val);
+                int amount = amountPrompt.getInt();
+                int index = indexPrompt.getInt();
 
                 //przesunięcie poprzednich o jedno niżej
                 for (Node node : container.getChildren()) {
@@ -153,62 +114,19 @@ public class TableViewModel {
                 }
 
                 saveDataToArray();
-            });
-
-        });
+            }
+        }
     }
 
     public void deleteRow() {
-        TextInputDialog dialog = new TextInputDialog("1");
-        dialog.setTitle("Input row index");
-        dialog.setHeaderText("Enter row index");
-        dialog.setContentText("Start with row:");
-
-        //walidacja danych wejściowych
-        Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-        ok.addEventFilter(ActionEvent.ACTION, ae -> {
-            try{
-                int val = Integer.parseInt(dialog.getEditor().getText());
-                if(val < 1 || val > rows)
-                {
-                    throw new Exception("Bad data");
-                }
-            }
-            catch (Exception e)
-            {
-                ae.consume();//zatrzymanie nacisniecia
-                alert(e.getMessage());
-            }
-        });
-
-        Optional<String> res = dialog.showAndWait();
-
-        res.ifPresent(indexVal -> {
-            int index = Integer.parseInt(indexVal);
-
-            TextInputDialog amountDialog = new TextInputDialog("1");
-            amountDialog.setTitle("Number of rows");
-            amountDialog.setHeaderText("Enter amount of rows to be deleted");
-            amountDialog.setContentText("Rows");
-
-            Button amountOk = (Button) amountDialog.getDialogPane().lookupButton(ButtonType.OK);
-            amountOk.addEventFilter(ActionEvent.ACTION,ae->{
-                try{
-                    int val = Integer.parseInt(amountDialog.getEditor().getText());
-                    if(val < 1 || (index + val) > (rows + 1))
-                        throw new Exception("Wrong amount");
-                }
-                catch (Exception e)
-                {
-                    ae.consume();
-                    alert(e.getMessage());
-                }
-            });
-
-            Optional<String> amountRes = amountDialog.showAndWait();
-
-            amountRes.ifPresent(amountVal->{
-                int amount = Integer.parseInt(amountVal);
+        InputIntPrompt indexPrompt = new InputIntPrompt("Start with row:","Enter row index",1, rows);
+        indexPrompt.show();
+        if(indexPrompt.getInt() != -1) {
+            int index = indexPrompt.getInt();
+            InputIntPrompt amountPrompt = new InputIntPrompt("Rows", "Enter amount of rows to be deleted", 1, rows - index + 1);
+            amountPrompt.show();
+            if (amountPrompt.getInt() != -1) {
+                int amount = amountPrompt.getInt();
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Dialog");
@@ -240,65 +158,22 @@ public class TableViewModel {
                     }
                 }
                 saveDataToArray();
-            });
-
-        });
+            }
+        }
     }
 
     public void addColumn()
     {
-        TextInputDialog amountDialog = new TextInputDialog("1");
-        amountDialog.setTitle("Number of columns");
-        amountDialog.setHeaderText("Enter amount of columns to be added");
-        amountDialog.setContentText("Columns");
-
-        Button amountOk = (Button) amountDialog.getDialogPane().lookupButton(ButtonType.OK);
-        amountOk.addEventFilter(ActionEvent.ACTION,ae->{
-            try{
-                int val = Integer.parseInt(amountDialog.getEditor().getText());
-                if(val < 1)
-                    throw new Exception("Bad data");
-            }
-            catch (Exception e)
+        InputIntPrompt amountPrompt = new InputIntPrompt("Columns" ,"Enter amount of columns to be added", 1);
+        amountPrompt.show();
+        if(amountPrompt.getInt() != -1)
+        {
+            InputIntPrompt indexPrompt = new InputIntPrompt("After column(0=before first):","Enter column index",0, cols);
+            indexPrompt.show();
+            if(indexPrompt.getInt() != -1)
             {
-                ae.consume();
-                alert(e.getMessage());
-            }
-        });
-
-        Optional<String> amountRes = amountDialog.showAndWait();
-
-        amountRes.ifPresent(amountVal->{
-            int amount = Integer.parseInt(amountVal);
-
-            //drugi input dialog
-            TextInputDialog dialog = new TextInputDialog("1");
-            dialog.setTitle("Input column index");
-            dialog.setHeaderText("Enter column index");
-            dialog.setContentText("After column(0=before first):");
-
-            //walidacja danych wejściowych
-            Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-            ok.addEventFilter(ActionEvent.ACTION, ae -> {
-                try{
-                    int val = Integer.parseInt(dialog.getEditor().getText());
-                    if(val < 0 || val > cols)
-                    {
-                        throw new Exception("Bad data");
-                    }
-                }
-                catch (Exception e)
-                {
-                    ae.consume();//zatrzymanie nacisniecia
-                    alert(e.getMessage());
-                }
-            });
-
-            Optional<String> res = dialog.showAndWait();
-
-            res.ifPresent(val -> {
-
-                int index = Integer.parseInt(val);
+                int amount = amountPrompt.getInt();
+                int index = indexPrompt.getInt();
 
                 for(int i=0; i<amount; i++) {
                     for (Node node : container.getChildren()) {
@@ -323,62 +198,19 @@ public class TableViewModel {
                     cols++;
                 }
                 saveDataToArray();
-            });
-
-        });
+            }
+        }
     }
 
     public void deleteColumn(){
-        TextInputDialog dialog = new TextInputDialog("1");
-        dialog.setTitle("Input column index");
-        dialog.setHeaderText("Enter column index");
-        dialog.setContentText("Start with column:");
-
-        //walidacja danych wejściowych
-        Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-        ok.addEventFilter(ActionEvent.ACTION, ae -> {
-            try{
-                int val = Integer.parseInt(dialog.getEditor().getText());
-                if(val < 1 || val > cols)
-                {
-                    throw new Exception("Bad data");
-                }
-            }
-            catch (Exception e)
-            {
-                ae.consume();//zatrzymanie nacisniecia
-                alert(e.getMessage());
-            }
-        });
-
-        Optional<String> res = dialog.showAndWait();
-
-        res.ifPresent(indexVal -> {
-            int index = Integer.parseInt(indexVal);
-
-            TextInputDialog amountDialog = new TextInputDialog("1");
-            amountDialog.setTitle("Number of columns");
-            amountDialog.setHeaderText("Enter amount of columns to be deleted");
-            amountDialog.setContentText("Columns");
-
-            Button amountOk = (Button) amountDialog.getDialogPane().lookupButton(ButtonType.OK);
-            amountOk.addEventFilter(ActionEvent.ACTION,ae->{
-                try{
-                    int val = Integer.parseInt(amountDialog.getEditor().getText());
-                    if(val < 1 || (index + val) > (cols + 1))
-                        throw new Exception("Wrong amount");
-                }
-                catch (Exception e)
-                {
-                    ae.consume();
-                    alert(e.getMessage());
-                }
-            });
-
-            Optional<String> amountRes = amountDialog.showAndWait();
-
-            amountRes.ifPresent(amountVal->{
-                int amount = Integer.parseInt(amountVal);
+        InputIntPrompt indexPrompt = new InputIntPrompt("Start with column:","Enter column index",1, cols);
+        indexPrompt.show();
+        if(indexPrompt.getInt() != -1) {
+            int index = indexPrompt.getInt();
+            InputIntPrompt amountPrompt = new InputIntPrompt("Columns", "Enter amount of columns to be deleted", 1, cols - index + 1);
+            amountPrompt.show();
+            if (amountPrompt.getInt() != -1) {
+                int amount = amountPrompt.getInt();
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Dialog");
@@ -408,16 +240,8 @@ public class TableViewModel {
                         cols--;
                 }
                 saveDataToArray();
-            });
-
-        });
-    }
-
-    public void alert(String msg)
-    {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText(msg);
-        alert.showAndWait();
+            }
+        }
     }
 
     public void creatingLaTexFile(boolean skipTexSymbols) {
