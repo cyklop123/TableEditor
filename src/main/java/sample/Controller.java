@@ -39,12 +39,10 @@ public class Controller {
             window.setScene(new Scene(windowRoot));
             window.showAndWait();
 
-            if(UserInputWindowController.getColumns() !=0 && UserInputWindowController.getRows() != 0) {
-                if (tvm == null)
-                    tvm = new TableViewModel();
-                tvm.createTableView();
+            if (tvm == null)
+                tvm = new TableViewModel();
+            if(tvm.createTableView())
                 background.setCenter(tvm.getScrollPane());
-            }
 
         }
         catch (Exception e) {

@@ -27,6 +27,8 @@ public class TableViewModel {
         if (container.getChildren().size() == 0) {
             rows = UserInputWindowController.getRows();
             cols = UserInputWindowController.getColumns();
+            if(rows==0 && cols==0)
+                return false;
             for(int i=0; i<rows; i++)
             {
                 HBox row = new HBox();
