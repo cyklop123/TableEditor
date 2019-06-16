@@ -55,12 +55,4 @@ public class UserInputWindowController {
     static public Integer getRows() {
         return rows;
     }
-    static public void incrementColumns() { columns++; }
-    static public void decrementColumns() { columns--; }
-
-    static public void incrementRows()
-    {
-        rows++;
-    }
-    static public void decrementRows() { rows--; }
 }

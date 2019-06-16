@@ -17,16 +17,20 @@ import java.util.Optional;
 public class TableViewModel {
     private static List<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
 
+    private int rows=0,cols=0;
+
     GridPane container = new GridPane();
     ScrollPane scrollPane = new ScrollPane(container);
 
-    public void createTableView (Integer rows, Integer columns) {
+    public void createTableView () {
         if (container.getChildren().size() == 0) {
+            rows = UserInputWindowController.getRows();
+            cols = UserInputWindowController.getColumns();
             for(int i=0; i<rows; i++)
             {
                 HBox row = new HBox();
                 GridPane.setConstraints(row, 0, (i+1));
-                for(int j=0; j<columns; j++)
+                for(int j=0; j<cols; j++)
                 {
                     TextField cell = new TextField();
                     cell.setPromptText("row "+(i+1)+" col "+(j+1));
@@ -100,7 +104,7 @@ public class TableViewModel {
             ok.addEventFilter(ActionEvent.ACTION, ae -> {
                 try{
                     int val = Integer.parseInt(dialog.getEditor().getText());
-                    if(val < 0 || val > UserInputWindowController.getRows())
+                    if(val < 0 || val > rows)
                     {
                         throw new Exception("Bad data");
                     }
@@ -137,7 +141,7 @@ public class TableViewModel {
                     GridPane.setConstraints(row, 0, index + 1 + j);
 
                     //tworzenie wiersza
-                    for (int i = 0; i < UserInputWindowController.getColumns(); i++) {
+                    for (int i = 0; i < cols; i++) {
                         TextField cell = new TextField();
                         cell.setPromptText("row " + (index + 1 + j) + " col " + (i + 1));
                         cell.setMaxWidth(140);
@@ -145,7 +149,7 @@ public class TableViewModel {
                         row.getChildren().addAll(cell);
                     }
                     container.getChildren().add(index + j, row);
-                    UserInputWindowController.incrementRows();
+                    rows++;
                 }
 
                 saveDataToArray();
@@ -165,7 +169,7 @@ public class TableViewModel {
         ok.addEventFilter(ActionEvent.ACTION, ae -> {
             try{
                 int val = Integer.parseInt(dialog.getEditor().getText());
-                if(val < 1 || val > UserInputWindowController.getRows())
+                if(val < 1 || val > rows)
                 {
                     throw new Exception("Bad data");
                 }
@@ -191,7 +195,7 @@ public class TableViewModel {
             amountOk.addEventFilter(ActionEvent.ACTION,ae->{
                 try{
                     int val = Integer.parseInt(amountDialog.getEditor().getText());
-                    if(val < 1 || (index + val) > (UserInputWindowController.getRows() + 1))
+                    if(val < 1 || (index + val) > (rows + 1))
                         throw new Exception("Wrong amount");
                 }
                 catch (Exception e)
@@ -219,10 +223,10 @@ public class TableViewModel {
                         HBox row = (HBox)container.getChildren().get(i-1);
                         row.getChildren().clear();
                         container.getChildren().remove(row);
-                        UserInputWindowController.decrementRows();
+                        rows--;
                     }
                     //przesunięcie elementów na siatce
-                    for(int i=index; i<=UserInputWindowController.getRows(); i++)
+                    for(int i=index; i<=rows; i++)
                     {
                         HBox row = (HBox) container.getChildren().get(i-1);
                         GridPane.setConstraints(row,0,i);
@@ -278,7 +282,7 @@ public class TableViewModel {
             ok.addEventFilter(ActionEvent.ACTION, ae -> {
                 try{
                     int val = Integer.parseInt(dialog.getEditor().getText());
-                    if(val < 0 || val > UserInputWindowController.getRows())
+                    if(val < 0 || val > cols)
                     {
                         throw new Exception("Bad data");
                     }
@@ -316,7 +320,7 @@ public class TableViewModel {
                             j++;
                         }
                     }
-                    UserInputWindowController.incrementColumns();
+                    cols++;
                 }
                 saveDataToArray();
             });
@@ -335,7 +339,7 @@ public class TableViewModel {
         ok.addEventFilter(ActionEvent.ACTION, ae -> {
             try{
                 int val = Integer.parseInt(dialog.getEditor().getText());
-                if(val < 1 || val > UserInputWindowController.getColumns())
+                if(val < 1 || val > cols)
                 {
                     throw new Exception("Bad data");
                 }
@@ -361,7 +365,7 @@ public class TableViewModel {
             amountOk.addEventFilter(ActionEvent.ACTION,ae->{
                 try{
                     int val = Integer.parseInt(amountDialog.getEditor().getText());
-                    if(val < 1 || (index + val) > (UserInputWindowController.getColumns() + 1))
+                    if(val < 1 || (index + val) > (cols + 1))
                         throw new Exception("Wrong amount");
                 }
                 catch (Exception e)
@@ -392,7 +396,7 @@ public class TableViewModel {
                         {
                             row.getChildren().remove(row.getChildren().get(i-1));
                         }
-                        for(int i=index; i<=(UserInputWindowController.getColumns()-amount); i++)
+                        for(int i=index; i<=(cols-amount); i++)
                         {
                             TextField tf = (TextField) row.getChildren().get(i-1);
                             tf.setPromptText("row "+k+" col "+i);
@@ -401,7 +405,7 @@ public class TableViewModel {
                     }
                     //zmniejszenie rozmiaru
                     for(int i=0; i<amount; i++)
-                        UserInputWindowController.decrementColumns();
+                        cols--;
                 }
                 saveDataToArray();
             });

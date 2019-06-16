@@ -1,6 +1,8 @@
 package sample;
 
 
+import alerts.AlertError;
+import alerts.InputIntPrompt;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,18 +39,13 @@ public class Controller {
             window.setScene(new Scene(windowRoot));
             window.showAndWait();
 
-            Integer a = UserInputWindowController.getRows();
-            Integer b = UserInputWindowController.getColumns();
-
-            if (a != 0 && b != 0) {
-                if(tvm == null)
-                    tvm = new TableViewModel();
-                tvm.createTableView(a, b);
-                background.setCenter(tvm.getScrollPane());
-            }
+            if(tvm == null)
+                tvm = new TableViewModel();
+            tvm.createTableView();
+            background.setCenter(tvm.getScrollPane());
         }
         catch (Exception e) {
-            tvm.alert(e.getMessage());
+            new AlertError(e.getMessage()).show();
         }
     }
 
@@ -62,7 +59,7 @@ public class Controller {
             tvm.addRow();
         }
         else{
-            tvm.alert("Create table first");
+            new AlertError("Create table first").show();
         }
     }
 
@@ -76,7 +73,7 @@ public class Controller {
             tvm.addColumn();
         }
         else{
-            tvm.alert("Create table first");
+            new AlertError("Create table first").show();
         }
     }
 
@@ -90,7 +87,7 @@ public class Controller {
             tvm.deleteColumn();
         }
         else{
-            tvm.alert("Create table first");
+            new AlertError("Create table first").show();
         }
     }
 
@@ -104,7 +101,7 @@ public class Controller {
             tvm.deleteRow();
         }
         else{
-            tvm.alert("Create table first");
+            new AlertError("Create table first").show();
         }
     }
 
@@ -117,7 +114,7 @@ public class Controller {
             tvm.creatingLaTexFile(skipTexSymbolsCheck.isSelected());
         }
         else{
-            tvm.alert("Create table first");
+            new AlertError("Create table first").show();
         }
     }
 }
