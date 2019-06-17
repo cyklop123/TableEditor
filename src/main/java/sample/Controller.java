@@ -2,6 +2,7 @@ package sample;
 
 
 import alerts.AlertError;
+import alerts.AlertInfo;
 import alerts.InputIntPrompt;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -117,5 +118,11 @@ public class Controller {
         else{
             new AlertError("Create table first").show();
         }
+    }
+
+    @FXML
+    public void about()
+    {
+        new AlertInfo("It is a simple table creator that genrates LaTeX.").show();
     }
 }
